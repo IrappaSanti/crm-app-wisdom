@@ -12,9 +12,13 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "date-fns": "^4.1.0",
+    "email-validator": "^2.0.4",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }

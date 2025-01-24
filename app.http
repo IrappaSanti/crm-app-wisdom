@@ -1,88 +1,79 @@
-
+### User can get the details of customers who assigned to them
+### if user role is admin they can access all customer details
 GET http://localhost:3000/customers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
-###
+### Only the user can get access the customer who are assigned to them details
+GET http://localhost:3000/customer/18
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
+
+### User whose role is admin can access all users data if role is user only get their own details
 GET http://localhost:3000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
+### User get access to get customer details who are assigned to them with filtering options
+GET http://localhost:3000/customers/?name=Bob&company=xyz&offset=0&limit=3&order_by=id&order=ASC
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
-###
-
-GET http://localhost:3000/customers/?name=Bob&offset=0&limit=3&order_by=id&order=ASC
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
-
-###
-
+### Register a User
 POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-    "id":1,
-    "name": "Irp",
-    "email": "irp@gmail.com",
-    "password": "Irp@123",
-    "role": "user",
-    "created_at": "2025-01-23 12:21:02",
-    "updated_at": "2025-01-23 12:21:02"
+    "name": "anu",
+    "email": "anu@example.com",
+    "password": "anu123",
+    "role": "admin"
 }
 
-###
-
+### Login User
 POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "email": "irp@gmail.com",
-    "password": "Irp@123"
+    "email": "anu@example.com",
+    "password": "anu123"
 }
 
-###
-
+### User can See their profile details
 GET http://localhost:3000/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
-###
-
+### Add customer
 POST http://localhost:3000/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 Content-Type: application/json
 
 {
-    "name": "irappa",
-    "email": "irappa@gmail.com",
-    "phone": "9916679759",
-    "company": "xyz",
-    "user_id": 1,
-    "created_at": "2025-01-22",
-    "updated_at": "2025-01-22"
+    "name": "Bob smith",
+    "email": "Bob2@gmail.com",
+    "phone": "1234567796",
+    "company": "bbb",
+    "user_id": 12
 }
 
-###
-
-
-
+### admin only can update the any customers 
+### Only user assign with customer can update customer detail
 PUT http://localhost:3000/customer/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 Content-Type: application/json
 
 {
-    "name": "John Doe",
+     "name": "John Doe",
     "email": "john.doe@example.com",
     "phone": "1234567890",
     "company": "Tech Corp",
-    "user_id": 1,
-    "created_at": "2025-01-23 10:51:32",
-    "updated_at": "2025-01-23 10:51:32"
+    "user_id": 12
   }
 
 
-###
-GET http://localhost:3000/customer/8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+### User delete only customers who assigned to them 
+### Admin has access to delete any customer
+DELETE http://localhost:3000/customer/19
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
-###
-
-DELETE http://localhost:3000/user/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlycEBnbWFpbC5jb20iLCJpYXQiOjE3Mzc2NDA2Mjh9.eJs0TVKQDZPiW_rzFiIiEzT0pM61NjBQTmS3tOTSi1Q
+### Admin only can delete users
+### And Deleted user customers will automatically assign to other users
+DELETE http://localhost:3000/user/12
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
