@@ -256,12 +256,20 @@ app.post('/',authenticationToken, async (req, res) => {
         VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
 
-    try {
-        const result = await db.run(query, [name, email, phone, company, user_id, `${created_at}`, `${updated_at}`]);
-        res.send({ message: 'Customer added successfully', result });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: error.message });
+    const q = `SELECT * FROM customer WHERE email LIKE ?`;
+    const ans = await db.get(q, [`%${email}%`]);
+    if (ans===undefined){
+        try {
+            const result = await db.run(query, [name, email, phone, company, user_id, `${created_at}`, `${updated_at}`]);
+            res.send({ message: 'Customer added successfully', result });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: error.message });
+        }
+    }
+    else{
+        res.status(400);
+        res.send("Customer already Exist")
     }
 });
 
