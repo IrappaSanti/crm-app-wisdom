@@ -1,7 +1,7 @@
 ### User can get the details of customers who assigned to them
 ### if user role is admin they can access all customer details
 GET http://localhost:3000/customers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzg4OTA3OX0.8MmYC053-WxOQ8N-bd9JdiKo1kvr2kBLt8JgP67gKkg
 
 ### Only the user can get access the customer who are assigned to them details
 GET http://localhost:3000/customer/18
@@ -9,15 +9,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBle
 
 
 ### User whose role is admin can access all users data if role is user only get their own details
-GET http://localhost:3000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTc0MDkwODgxN30.SFFtd7ABy0j-SP87bs39vG2vPzIG6dSQ2McWkZGcIAM
 
 ### User get access to get customer details who are assigned to them with filtering options
 GET http://localhost:3000/customers/?name=Bob&company=xyz&offset=0&limit=3&order_by=id&order=ASC
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBleGFtcGxlLmNvbSIsImlhdCI6MTczNzczMzY2OX0.mSr5n21rjaylY30MVdtQP0No3Yygx2QkpQHTyPQCcIk
 
 ### Register a User
-POST http://localhost:3000/register
+POST http://localhost:5000/register
 Content-Type: application/json
 
 {
@@ -46,10 +46,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudUBle
 Content-Type: application/json
 
 {
-    "name": "Bob smith",
-    "email": "Bob2@gmail.com",
+    "name": "abc",
+    "email": "abc@gmail.com",
     "phone": "1234567796",
-    "company": "bbb",
+    "company": "abc",
     "user_id": 12
 }
 

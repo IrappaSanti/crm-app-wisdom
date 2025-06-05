@@ -6,10 +6,15 @@ const path=require('path')
 const exp = require('constants')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
+const cors=require("cors")
 var validator = require("email-validator");
 const { error } = require('console')
 
 const dbPath=path.join(__dirname,"goodsread.db")
+
+app.use(cors({
+    origin:"*"
+}))
 
 let db=null;
 
@@ -19,8 +24,8 @@ const initializeServerWithDatabase = async () => {
             filename:dbPath,
             driver:sqlite3.Database
         });
-        app.listen(3000,()=>{
-            console.log('Server get started at http://localhost:3000');
+        app.listen(5000,()=>{
+            console.log('Server get started at http://localhost:5000');
         })
     }catch(e){
         console.log(`DB server Error: ${e.message}`)
@@ -76,6 +81,7 @@ const checkUserRole= async(req,res,next)=>{
     
 }
 
+
 //User whose role is admin can access all users data if role is user only get their own details
 app.get('/users',authenticationToken,checkUserRole,async(req,res)=>{
     const { userRole,userId } = req;
@@ -119,11 +125,11 @@ app.get('/customers',authenticationToken,checkUserRole, async(req,res)=>{
                 order_by = 'id',}=req.query
             const query=`select * from customer where name like '%${name}%' and user_id=${userId} order by ${order_by} limit ${limit} offset ${offset};`
             const execute= await db.all(query);
-            res.send(execute)
+            res.status(200).json(execute)
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
     
 });
@@ -154,7 +160,7 @@ app.use(express.json())
 
 //Register a User
 app.post('/register', async (request, response) => {
-    const {name, email,password,role}=request.body
+    const {name,email,password,role}=request.body
     const date = new Date()
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -170,8 +176,8 @@ app.post('/register', async (request, response) => {
         response.send("Invalid Email Id")
         return;
     }
-    const q = `SELECT * FROM users WHERE name LIKE ?`;
-    const ans = await db.get(q, [`%${name}%`]);
+    const q = `SELECT * FROM users WHERE email LIKE ?`;
+    const ans = await db.get(q, [`%${email}%`]);
     const hashedpassword=await bcrypt.hash(password,10);
     const query=`INSERT INTO users (name, email, password, role, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?);`
@@ -185,8 +191,7 @@ app.post('/register', async (request, response) => {
         }
     }
     else{
-        response.status(400);
-        response.send("User already Exist")
+        response.status(400).json({ message: "User already exists!, Click login", exist:true });
     }
 });
 
@@ -195,14 +200,12 @@ app.post('/login', async (request, response) => {
     const {email,password}=request.body
     const emailValid=validator.validate(email);
     if (!emailValid){
-        response.send("Invalid Email Id")
-        return;
+        response.status(400).json({ error: "Invalid Email Id"});
     }
     const q = `SELECT * FROM users WHERE email LIKE ?`;
     const ans = await db.get(q, [`%${email}%`]);
     if (ans===undefined){
-        response.status(400)
-        response.send("Invalid email Id")
+        response.status(400).json({ error: "Invalid Email Id"});
     }
     else{
         const comparepassword=await bcrypt.compare(password,ans.password);
@@ -212,8 +215,7 @@ app.post('/login', async (request, response) => {
             response.send({jwt_token})
         }
         else{
-            response.status(400)
-            response.send("Invalid Password")
+            response.status(400).json({ error: "Invalid Password"});
         }
     }
 });
@@ -224,12 +226,8 @@ app.get('/profile',authenticationToken,async(req,res)=>{
     const q = `SELECT * FROM users WHERE email LIKE ?`;
     const ans = await db.get(q, [`%${email}%`]);
     
-    if (ans===undefined){
-        response.status(400)
-        response.send("Invalid email Id")
-    }
-    else{
-        res.send(ans)
+    if (ans!==undefined){
+        res.status(200).json({profile:ans})
     }
 })
 
@@ -255,14 +253,23 @@ app.post('/',authenticationToken, async (req, res) => {
         INSERT INTO customer (name, email, phone, company,user_id, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
-
-    try {
-        const result = await db.run(query, [name, email, phone, company, user_id, `${created_at}`, `${updated_at}`]);
-        res.send({ message: 'Customer added successfully', result });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: error.message });
+    
+    const q = `SELECT * FROM customer WHERE email LIKE ?`;
+    const ans = await db.get(q, [`%${email}%`]);
+    if (ans===undefined){
+        try {
+            const result = await db.run(query, [name, email, phone, company, user_id, `${created_at}`, `${updated_at}`]);
+            res.send({ message: 'Customer added successfully', result });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: error.message });
+        }
     }
+    else{
+        res.status(400);
+        res.send("Customer already Exist")
+    }
+    
 });
 
 
